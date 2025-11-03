@@ -88,27 +88,10 @@ audio {
 .heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); }
 .circle { border-radius: 50%; }
 
-/* Movimiento de derecha a izquierda con desvíos aleatorios */
 @keyframes float {
-    0% {
-        transform: translate(100vw, 0px) rotate(0deg);
-        opacity: 0;
-    }
-    40% {
-        opacity: 1;
-    }
-    60% {
-        transform: translate(50vw, -50px) rotate(180deg);
-    }
-    80% {
-        transform: translate(20vw, 40px) rotate(270deg);
-    }
-    100% {
-        transform: translate(-20vw, -30px) rotate(360deg);
-        opacity: 0;
-    }
-}
-
+    0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
 }
 
 /* Luz hacia adentro */
@@ -157,14 +140,14 @@ audio {
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
+        :tada: HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida :heart:
     </p>
 
     <p id="mensaje"></p>
     <img id="gif">
 
     <div id="musicaArea">
-        <p>🎶 - PONLE MUSICA A MIKU!!!1!1!! (yo) - 🎵</p>
+        <p>:notes: - PONLE MUSICA A MIKU!!!1!1!! (yo) - :musical_note:</p>
         <button onclick="toggleMusica()" id="btnMusica">▶ Reproducir</button>
     </div>
 
@@ -190,14 +173,14 @@ function verificarContraseña() {
     const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
 
     if (input.value === claveCorrecta) {
-        mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
+        mensaje.textContent = ":white_check_mark: ¡Contraseña correcta! :mango:";
         zonaPersonal.style.display = "block";
         gif.style.display = "block";
         gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
         input.disabled = true;
         musicaArea.style.display = "block";
     } else {
-        mensaje.textContent = "❌ Contraseña incorrecta ❌";
+        mensaje.textContent = ":x: Contraseña incorrecta :x:";
         zonaPersonal.style.display = "none";
         gif.style.display = "block";
         gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
@@ -212,8 +195,6 @@ function toggleMusica() {
     if (musica.paused) {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
-        createParticles(); // arranca partículas inmediatamente
-
 
         // Gradual neon + fondo + degradado azul marino
 let step = 0;
@@ -222,10 +203,10 @@ const interval = setInterval(() => {
     step++;
     let progress = step / steps;
 
-    // 💡 Brillo neón igual que antes
+    // :bulb: Brillo neón igual que antes
     container.style.boxShadow = `0 0 ${progress * 25}px #d8c9a7, 0 0 ${progress * 40}px #d8c9a7 inset`;
 
-    // 🎨 Fondo degradado azul marino
+    // :art: Fondo degradado azul marino
     let opacity = progress;
     body.style.background = `
         linear-gradient(
@@ -259,11 +240,11 @@ createGlows();
 setInterval(() => {
     createRays();
     createGlows();
-}, 1950);
+}, 1953);
 
 // partículas por separado como antes
 createParticles();
-setInterval(createParticles, 350);
+setInterval(createParticles, 1000);
 
 }
 
@@ -280,7 +261,7 @@ function createRays() {
         ray.style.left = `${Math.random() * 100}%`;
         ray.style.top = `${Math.random() * 100}%`;
 
-        // 📌 Color aleatorio
+        // :pushpin: Color aleatorio
         ray.style.background = rayColors[Math.floor(Math.random() * rayColors.length)];
 
         body.appendChild(ray);
@@ -293,19 +274,15 @@ function createParticles(){
     const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
     const heartColors = ["#FF0000", "#00FFFF"];
 
-    for (let i = 0; i < 80; i++) { // muchas más partículas
-
+    for(let i=0;i<10;i++){
         const p = document.createElement("div");
         const type = types[Math.floor(Math.random()*types.length)];
         p.className = "particle "+type;
-        p.style.left = `105%`;
+        p.style.left = `${Math.random()*100}%`;
         p.style.top = `${Math.random()*100}%`;
         p.style.width = `${5+Math.random()*15}px`;
         p.style.height = p.style.width;
         p.style.opacity = Math.random();
-
-        // ✅ Animación más rápida y fluida
-        p.style.animation = `float ${1.5 + Math.random()*2}s linear infinite`;
 
         if(type==="circle"){
             p.style.background = circleColors[Math.floor(Math.random()*circleColors.length)];
@@ -313,7 +290,6 @@ function createParticles(){
             const p2 = p.cloneNode();
             p2.style.left = `${Math.random()*100}%`;
             p2.style.top = `${Math.random()*100}%`;
-            p2.style.animation = `float ${1.5 + Math.random()*2}s linear infinite`; // ✅ también animación
             body.appendChild(p2);
             setTimeout(()=>p2.remove(),5000);
         } else if(type==="heart"){
@@ -324,7 +300,6 @@ function createParticles(){
         setTimeout(()=>p.remove(),5000);
     }
 }
-
 
 function createGlows() {
     const glowColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
@@ -338,7 +313,7 @@ function createGlows() {
         glow.style.width = `${50 + Math.random()*150}px`;
         glow.style.height = glow.style.width;
 
-        // 📌 Color aleatorio aplicado al gradiente
+        // :pushpin: Color aleatorio aplicado al gradiente
         const color = glowColors[Math.floor(Math.random() * glowColors.length)];
         glow.style.background = `radial-gradient(circle, ${color}80 0%, rgba(255,255,255,0) 70%)`;
 
@@ -350,19 +325,3 @@ function createGlows() {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>TOP SECRET</title>
-
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -69,9 +68,11 @@ button {
     margin-top: 20px;
 }
 
-audio { display: none; }
+audio {
+    display: none;
+}
 
-/* Partículas */
+/* Partículas y luces */
 .particle {
     position: absolute;
     width: 10px;
@@ -83,18 +84,9 @@ audio { display: none; }
     animation: float 5s linear infinite;
 }
 
-.star {
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    background: gold;
-}
-
-.heart {
-    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%);
-}
-
-.circle {
-    border-radius: 50%;
-}
+.star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: gold; }
+.heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); }
+.circle { border-radius: 50%; }
 
 @keyframes float {
     0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
@@ -102,7 +94,7 @@ audio { display: none; }
     100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
 }
 
-/* Luces */
+/* Luz hacia adentro */
 .lightRay {
     position: absolute;
     width: 2px;
@@ -119,7 +111,7 @@ audio { display: none; }
     100% { transform: scaleY(3) rotate(var(--angle)); opacity: 0; }
 }
 
-/* Destellos */
+/* Destellos circulares grandes difuminados */
 .lightGlow {
     position: absolute;
     border-radius: 50%;
@@ -140,7 +132,6 @@ audio { display: none; }
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
@@ -149,15 +140,14 @@ audio { display: none; }
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY 🥳
-        TE KIEROOOO ❤️
+        :tada: HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida :heart:
     </p>
 
     <p id="mensaje"></p>
     <img id="gif">
 
     <div id="musicaArea">
-        <p>🎶 - PONLE MUSICA A MIKU!!!1!1!! - 🎵</p>
+        <p>:notes: - PONLE MUSICA A MIKU!!!1!1!! (yo) - :musical_note:</p>
         <button onclick="toggleMusica()" id="btnMusica">▶ Reproducir</button>
     </div>
 
@@ -175,23 +165,22 @@ const mensaje = document.getElementById("mensaje");
 const container = document.querySelector(".container");
 const body = document.body;
 
-input.addEventListener("keydown", e => {
-    if (e.key === "Enter") verificarContraseña();
+input.addEventListener("keydown", event => {
+    if (event.key === "Enter") verificarContraseña();
 });
 
-function verificarContraseña(){
-    const claveCorrecta =
-    "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE...";
-    
-    if(input.value === claveCorrecta){
-        mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
+function verificarContraseña() {
+    const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
+
+    if (input.value === claveCorrecta) {
+        mensaje.textContent = ":white_check_mark: ¡Contraseña correcta! :mango:";
         zonaPersonal.style.display = "block";
         gif.style.display = "block";
         gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
         input.disabled = true;
         musicaArea.style.display = "block";
     } else {
-        mensaje.textContent = "❌ Contraseña incorrecta ❌";
+        mensaje.textContent = ":x: Contraseña incorrecta :x:";
         zonaPersonal.style.display = "none";
         gif.style.display = "block";
         gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
@@ -202,36 +191,41 @@ function verificarContraseña(){
     }
 }
 
-function toggleMusica(){
-    if(musica.paused){
+function toggleMusica() {
+    if (musica.paused) {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
 
-        let step = 0;
-        const steps = 50;
-        const interval = setInterval(()=>{
-            step++;
-            let progress = step / steps;
+        // Gradual neon + fondo + degradado azul marino
+let step = 0;
+const steps = 50;
+const interval = setInterval(() => {
+    step++;
+    let progress = step / steps;
 
-            container.style.boxShadow =
-            `0 0 ${progress * 25}px #d8c9a7,
-             0 0 ${progress * 40}px #d8c9a7 inset`;
+    // :bulb: Brillo neón igual que antes
+    container.style.boxShadow = `0 0 ${progress * 25}px #d8c9a7, 0 0 ${progress * 40}px #d8c9a7 inset`;
 
-            let opacity = progress;
-            body.style.background =
-            `linear-gradient(
-                to bottom,
-                rgba(0,5,18, ${opacity}) 0%,
-                rgba(0,5,18, ${opacity * 0.7}) 40%,
-                rgba(0,5,18, ${opacity * 0.3}) 80%,
-                rgba(0,5,18, 0) 100%
-            ), #000001`;
+    // :art: Fondo degradado azul marino
+    let opacity = progress;
+    body.style.background = `
+        linear-gradient(
+            to bottom,
+            rgba(0,5,18, ${opacity}) 0%,
+            rgba(0,5,18, ${opacity * 0.7}) 40%,
+            rgba(0,5,18, ${opacity * 0.3}) 80%,
+            rgba(0,5,18, 0) 100%
+        ),
+        #000001
 
-            if(step >= steps){
-                clearInterval(interval);
-                startParty();
-            }
-        },100);
+    `;
+
+    if (step >= steps) {
+        clearInterval(interval);
+        startParty();
+    }
+}, 100);
+
 
     } else {
         musica.pause();
@@ -240,31 +234,45 @@ function toggleMusica(){
 }
 
 function startParty(){
+// luces + destellos al mismo tiempo
+createRays();
+createGlows();
+setInterval(() => {
     createRays();
     createGlows();
-    setInterval(()=>{ createRays(); createGlows(); }, 1945);
-    createParticles();
-    setInterval(createParticles, 1000);
+}, 1960);
+
+// partículas por separado como antes
+createParticles();
+setInterval(createParticles, 1000);
+
 }
 
-function createRays(){
+function createRays() {
     const rayColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
-    for(let i=0;i<15;i++){
+
+    for(let i = 0; i < 15; i++){
         const ray = document.createElement("div");
         ray.className = "lightRay";
-        ray.style.setProperty("--angle", Math.random()*360 + "deg");
-        ray.style.left = `${Math.random()*100}%`;
-        ray.style.top = `${Math.random()*100}%`;
-        ray.style.background = rayColors[Math.floor(Math.random()*rayColors.length)];
+
+        let angle = Math.random() * 360;
+        ray.style.setProperty("--angle", angle + "deg");
+
+        ray.style.left = `${Math.random() * 100}%`;
+        ray.style.top = `${Math.random() * 100}%`;
+
+        // :pushpin: Color aleatorio
+        ray.style.background = rayColors[Math.floor(Math.random() * rayColors.length)];
+
         body.appendChild(ray);
-        setTimeout(()=>ray.remove(),1945);
+        setTimeout(() => ray.remove(), 1945);
     }
 }
 
 function createParticles(){
     const types = ["star","heart","circle"];
     const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
-    const heartColors = ["#FF0000","#00FFFF"];
+    const heartColors = ["#FF0000", "#00FFFF"];
 
     for(let i=0;i<10;i++){
         const p = document.createElement("div");
@@ -278,6 +286,12 @@ function createParticles(){
 
         if(type==="circle"){
             p.style.background = circleColors[Math.floor(Math.random()*circleColors.length)];
+            // Duplicar círculos
+            const p2 = p.cloneNode();
+            p2.style.left = `${Math.random()*100}%`;
+            p2.style.top = `${Math.random()*100}%`;
+            body.appendChild(p2);
+            setTimeout(()=>p2.remove(),5000);
         } else if(type==="heart"){
             p.style.background = heartColors[Math.floor(Math.random()*heartColors.length)];
         }
@@ -287,22 +301,24 @@ function createParticles(){
     }
 }
 
-function createGlows(){
+function createGlows() {
     const glowColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
-    for(let i=0;i<5;i++){
+
+    for(let i=0; i<5; i++){
         const glow = document.createElement("div");
         glow.className = "lightGlow";
         glow.style.left = `${Math.random()*100}%`;
         glow.style.top = `${Math.random()*100}%`;
+
         glow.style.width = `${50 + Math.random()*150}px`;
         glow.style.height = glow.style.width;
 
+        // :pushpin: Color aleatorio aplicado al gradiente
         const color = glowColors[Math.floor(Math.random() * glowColors.length)];
-        glow.style.background =
-        `radial-gradient(circle, ${color}80 0%, rgba(255,255,255,0) 70%)`;
+        glow.style.background = `radial-gradient(circle, ${color}80 0%, rgba(255,255,255,0) 70%)`;
 
         body.appendChild(glow);
-        setTimeout(()=>glow.remove(),2000);
+        setTimeout(() => glow.remove(), 2000);
     }
 }
 </script>

@@ -242,9 +242,12 @@ function startEffects(){
 }
 
 function party(){
-    setInterval(createRays, 800);
+    setInterval(()=>{
+        createRays();
+        createFlashes();
+    }, 800);
+
     setInterval(createParticles, 600);
-    setInterval(createFlashes, 1500);
 }
 
 function createRays(){
@@ -260,31 +263,6 @@ function createRays(){
     }
 }
 
-function createParticles(){
-    for(let i=0;i<20;i++){
-        const type = ["star","circle","heart"][Math.floor(Math.random()*3)];
-        const p = document.createElement("div");
-        p.className = "particle "+type;
-        p.style.left = `${Math.random()*100}%`;
-        p.style.top = `${Math.random()*100}%`;
-
-        if(type==="circle"){
-            let color = coloresCirculos[Math.floor(Math.random()*coloresCirculos.length)];
-            p.style.background = color;
-            p.style.width = p.style.height = `${5+Math.random()*15}px`;
-        }
-        if(type==="heart"){
-            p.style.background = Math.random()>0.5 ? coloresCorazones.rojo : coloresCorazones.cian;
-        }
-        if(type==="star"){
-            p.style.background = "gold";
-        }
-
-        body.appendChild(p);
-        setTimeout(()=>p.remove(),5000);
-    }
-}
-
 function createFlashes(){
     for(let i=0;i<3;i++){
         const f = document.createElement("div");
@@ -296,7 +274,9 @@ function createFlashes(){
         setTimeout(()=>f.remove(),2000);
     }
 }
+
 </script>
 
 </body>
 </html>
+

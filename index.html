@@ -13,6 +13,7 @@
         align-items: center;
         height: 100vh;
         margin: 0;
+        overflow: hidden; /* Para partículas */
     }
     .container {
         background-color: #2a2a2a;
@@ -21,6 +22,7 @@
         border: 3px solid #d8c9a7;
         text-align: center;
         width: 350px;
+        transition: border-color 0.5s ease;
     }
     input {
         padding: 10px;
@@ -50,6 +52,7 @@
         border-radius: 10px;
         margin-left: auto;
         margin-right: auto;
+        transition: transform 0.3s ease;
     }
     #musicaArea {
         display: none;
@@ -57,6 +60,21 @@
     }
     audio {
         display: none;
+    }
+    /* Partículas */
+    .particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #d8c9a7;
+        border-radius: 50%;
+        opacity: 0.8;
+        pointer-events: none;
+        animation: fall linear;
+    }
+    @keyframes fall {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 </style>
 </head>
@@ -80,62 +98,84 @@
     </div>
 
     <audio id="musica" src="mikuSong.mp3"></audio>
-
 </div>
 
 <script>
-    const input = document.getElementById("password");
-    const musica = document.getElementById("musica");
-    const musicaArea = document.getElementById("musicaArea");
-    const botonMusica = document.getElementById("btnMusica");
+const input = document.getElementById("password");
+const musica = document.getElementById("musica");
+const musicaArea = document.getElementById("musicaArea");
+const botonMusica = document.getElementById("btnMusica");
+const gif = document.getElementById("gif");
+const zonaPersonal = document.getElementById("zonaPersonal");
+const mensaje = document.getElementById("mensaje");
+const container = document.querySelector(".container");
 
-    input.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            verificarContraseña();
-        }
-    });
-
-    function verificarContraseña() {
-        const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
-        const mensaje = document.getElementById("mensaje");
-        const gif = document.getElementById("gif");
-        const zonaPersonal = document.getElementById("zonaPersonal");
-
-        if (input.value === claveCorrecta) {
-            mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
-            zonaPersonal.style.display = "block";
-            gif.style.display = "block";
-            gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
-            input.disabled = true;
-
-            musicaArea.style.display = "block";
-        } else {
-            mensaje.textContent = "❌ Contraseña incorrecta ❌";
-            zonaPersonal.style.display = "none";
-            gif.style.display = "block";
-            gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
-
-            musica.pause();
-            musica.currentTime = 0;
-            musicaArea.style.display = "none";
-
-            botonMusica.textContent = "▶ Reproducir";
-        }
+input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        verificarContraseña();
     }
+});
 
-    function toggleMusica() {
-        if (musica.paused) {
-            musica.play();
-            botonMusica.textContent = "⏸ Pausar";
-        } else {
-            musica.pause();
-            botonMusica.textContent = "▶ Reproducir";
+function verificarContraseña() {
+    const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
+
+    if (input.value === claveCorrecta) {
+        mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
+        zonaPersonal.style.display = "block";
+        gif.style.display = "block";
+        gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
+        input.disabled = true;
+        musicaArea.style.display = "block";
+
+        // Animación de rebote de Miku
+        gif.style.animation = "bounce 0.5s infinite alternate";
+        container.style.borderColor = "#ffdd99";
+
+        // Crear partículas
+        for(let i=0;i<30;i++){
+            crearParticula();
         }
+    } else {
+        mensaje.textContent = "❌ Contraseña incorrecta ❌";
+        zonaPersonal.style.display = "none";
+        gif.style.display = "block";
+        gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
+        musica.pause();
+        musica.currentTime = 0;
+        musicaArea.style.display = "none";
+        botonMusica.textContent = "▶ Reproducir";
     }
+}
+
+// Botón de música
+function toggleMusica() {
+    if (musica.paused) {
+        musica.play();
+        botonMusica.textContent = "⏸ Pausar";
+    } else {
+        musica.pause();
+        botonMusica.textContent = "▶ Reproducir";
+    }
+}
+
+// Función para crear partículas
+function crearParticula(){
+    const p = document.createElement("div");
+    p.classList.add("particle");
+    p.style.left = Math.random()*100 + "vw";
+    p.style.animationDuration = (Math.random()*2 + 2) + "s";
+    document.body.appendChild(p);
+    setTimeout(()=>{ p.remove(); }, 4000);
+}
 </script>
+
+<style>
+/* Rebote del GIF */
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-15px); }
+}
+</style>
 
 </body>
 </html>
-
-
-

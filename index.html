@@ -230,7 +230,9 @@ function createRays(){
 function createParticles(){
     const types = ["star","heart","circle"];
     const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
-    for(let i=0;i<10;i++){ // Partículas normales
+    const heartColors = ["#FF0000", "#00FFFF"]; // Rojo y cian
+
+    for(let i=0;i<10;i++){
         const p = document.createElement("div");
         const type = types[Math.floor(Math.random()*types.length)];
         p.className = "particle "+type;
@@ -239,21 +241,27 @@ function createParticles(){
         p.style.width = `${5+Math.random()*15}px`;
         p.style.height = p.style.width;
         p.style.opacity = Math.random();
+
         if(type==="circle"){
             p.style.background = circleColors[Math.floor(Math.random()*circleColors.length)];
-            // 🎯 Duplicar círculos
+            // Duplicar círculos
             const p2 = p.cloneNode();
             p2.style.left = `${Math.random()*100}%`;
             p2.style.top = `${Math.random()*100}%`;
             body.appendChild(p2);
             setTimeout(()=>p2.remove(),5000);
+        } else if(type==="heart"){
+            p.style.background = heartColors[Math.floor(Math.random()*heartColors.length)];
         }
+
         body.appendChild(p);
         setTimeout(()=>p.remove(),5000);
     }
 }
+
 </script>
 
 </body>
 </html>
+
 

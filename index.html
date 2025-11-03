@@ -274,7 +274,7 @@ setInterval(createParticles, 1000);
 function createRays() {
     const rayColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
 
-    for(let i = 0; i < 45; i++){
+    for(let i = 0; i < 20; i++){
         const ray = document.createElement("div");
         ray.className = "lightRay";
 
@@ -297,7 +297,7 @@ function createParticles(){
     const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
     const heartColors = ["#FF0000", "#00FFFF"];
 
-    for(let i=0;i<50;i++){
+    for(let i=0;i<30;i++){
         const p = document.createElement("div");
         const type = types[Math.floor(Math.random()*types.length)];
         p.className = "particle "+type;
@@ -327,7 +327,7 @@ function createParticles(){
 function createGlows() {
     const glowColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
 
-    for(let i=0; i<20; i++){
+    for(let i=0; i<10; i++){
         const glow = document.createElement("div");
         glow.className = "lightGlow";
         glow.style.left = `${Math.random()*100}%`;
@@ -345,7 +345,7 @@ function createGlows() {
     }
 }
     function createBackgroundStars() {
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 30; i++) {
         const star = document.createElement("div");
         star.className = "backgroundStar";
         star.style.left = `${Math.random() * 100}%`;
@@ -360,6 +360,7 @@ function createGlows() {
 
 </body>
 </html>
+
 
 
 

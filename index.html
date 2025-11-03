@@ -17,16 +17,6 @@ body {
     transition: background-color 5s linear;
 }
 
-#azulOverlay {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(to bottom, #021024 0%, rgba(0,0,0,0) 100%);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 5s linear;
-    z-index: 0;
-}
-
 .container {
     background-color: #2a2a2a;
     padding: 20px;
@@ -35,7 +25,7 @@ body {
     text-align: center;
     width: 350px;
     position: relative;
-    z-index: 5;
+    z-index: 2;
     box-shadow: 0 0 0px #d8c9a7;
     transition: box-shadow 5s ease;
 }
@@ -69,82 +59,80 @@ button {
     display: none;
     width: 250px;
     border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#musicaArea { display: none; margin-top: 20px; }
-audio { display: none; }
+#musicaArea {
+    display: none;
+    margin-top: 20px;
+}
 
-/* partículas */
+audio {
+    display: none;
+}
+
+/* Partículas y luces */
 .particle {
     position: absolute;
-    opacity: 0.9;
+    width: 10px;
+    height: 10px;
+    opacity: 0.8;
+    border-radius: 50%;
     pointer-events: none;
+    z-index: 1;
     animation: float 5s linear infinite;
 }
 
-.star {
-    width: 12px;
-    height: 12px;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 
-                        79% 91%, 50% 70%, 21% 91%, 32% 57%, 
-                        2% 35%, 39% 35%);
-}
+.star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: gold; }
+.heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); }
+.circle { border-radius: 50%; }
 
-.heart {
-    width: 16px;
-    height: 16px;
-    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 
-                        2% 30%, 39% 0%, 50% 15%);
-}
-
-.circle {
-    border-radius: 50%;
-}
-
-/* luces giratorias */
-.lightRay {
-    position: absolute;
-    width: 2px;
-    height: 120px;
-    transform-origin: bottom center;
-    opacity: 0.7;
-    animation: raySpin 1.5s linear forwards;
-    filter: blur(1px);
-}
-
-@keyframes raySpin {
-    0% { transform: rotate(var(--angle)) scaleY(0); opacity: 1; }
-    100% { transform: rotate(calc(var(--angle) + 360deg)) scaleY(3); opacity: 0; }
-}
-
-/* destellos grandes */
-.flash {
-    position: absolute;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.6;
-    animation: flashFade 2s linear forwards;
-}
-
-@keyframes flashFade {
-    0% { opacity: 0; transform: scale(0.3); }
-    50% { opacity: 0.7; transform: scale(1); }
-    100% { opacity: 0; transform: scale(2); }
-}
-
-/* animación partículas */
 @keyframes float {
     0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
     50% { opacity: 1; }
     100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
 }
+
+/* Luz hacia adentro */
+.lightRay {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: rgba(255,255,255,0.5);
+    transform-origin: bottom center;
+    z-index: 0;
+    opacity: 0;
+    animation: rayMove 1.5s linear forwards;
+}
+
+@keyframes rayMove {
+    0% { transform: scaleY(0) rotate(0deg); opacity: 1; }
+    100% { transform: scaleY(3) rotate(var(--angle)); opacity: 0; }
+}
+
+/* Destellos circulares grandes difuminados */
+.lightGlow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+    width: 100px;
+    height: 100px;
+    transform: scale(0);
+    animation: glowMove 2s forwards;
+}
+
+@keyframes glowMove {
+    0% { transform: scale(0); opacity: 0.7; }
+    50% { transform: scale(1.5); opacity: 0.4; }
+    100% { transform: scale(2); opacity: 0; }
+}
 </style>
 </head>
-
 <body>
-<div id="azulOverlay"></div>
 
 <div class="container">
     <h2>Ingrese la contraseña:</h2>
@@ -152,7 +140,7 @@ audio { display: none; }
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 OLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA ❤️
+        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
     </p>
 
     <p id="mensaje"></p>
@@ -167,63 +155,61 @@ audio { display: none; }
 </div>
 
 <script>
-const coloresCirculos = ["lime","deepskyblue","darkgreen","blue",
-                        "purple","violet","yellow","orange",
-                        "gold","magenta","white","cyan","red"];
-
-const coloresLuces = [...coloresCirculos]; 
-
-const coloresCorazones = {
-    rojo: "red",
-    cian: "cyan"
-};
-
 const input = document.getElementById("password");
 const musica = document.getElementById("musica");
+const musicaArea = document.getElementById("musicaArea");
 const botonMusica = document.getElementById("btnMusica");
+const gif = document.getElementById("gif");
+const zonaPersonal = document.getElementById("zonaPersonal");
+const mensaje = document.getElementById("mensaje");
 const container = document.querySelector(".container");
 const body = document.body;
-const overlay = document.getElementById("azulOverlay");
 
-input.addEventListener("keydown", e => { if(e.key==="Enter") verificarContraseña() });
+input.addEventListener("keydown", event => {
+    if (event.key === "Enter") verificarContraseña();
+});
 
-function verificarContraseña(){
+function verificarContraseña() {
     const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
 
-    const ok = input.value === claveCorrecta;
-
-    document.getElementById("mensaje").textContent =
-        ok ? "✅ ¡Contraseña correcta! 🥭" : "❌ Contraseña incorrecta ❌";
-
-    document.getElementById("zonaPersonal").style.display = ok ? "block" : "none";
-
-    const gif = document.getElementById("gif");
-    gif.style.display = "block";
-    gif.src = ok
-        ? "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif"
-        : "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
-
-    if (!ok) {
+    if (input.value === claveCorrecta) {
+        mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
+        zonaPersonal.style.display = "block";
+        gif.style.display = "block";
+        gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
+        input.disabled = true;
+        musicaArea.style.display = "block";
+    } else {
+        mensaje.textContent = "❌ Contraseña incorrecta ❌";
+        zonaPersonal.style.display = "none";
+        gif.style.display = "block";
+        gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
         musica.pause();
         musica.currentTime = 0;
-        document.getElementById("musicaArea").style.display = "none";
+        musicaArea.style.display = "none";
         botonMusica.textContent = "▶ Reproducir";
-        return;
     }
-
-    input.disabled = true;
-    document.getElementById("musicaArea").style.display = "block";
 }
 
-function toggleMusica(){
-    if(musica.paused){
+function toggleMusica() {
+    if (musica.paused) {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
 
-        // ⏱️ Esperar 5 segundos antes de activar efectos
-        setTimeout(() => {
-            startEffects();
-        }, 5000);
+        // Gradual neon + fondo
+        let step = 0;
+        const steps = 50;
+        const interval = setInterval(() => {
+            step++;
+            let progress = step/steps;
+            container.style.boxShadow = `0 0 ${progress*25}px #d8c9a7, 0 0 ${progress*40}px #d8c9a7 inset`;
+            let colorValue = 26 - progress*10;
+            body.style.backgroundColor = `rgb(${colorValue},${colorValue},${colorValue})`;
+            if(step>=steps){
+                clearInterval(interval);
+                startParty();
+            }
+        }, 100);
 
     } else {
         musica.pause();
@@ -231,67 +217,79 @@ function toggleMusica(){
     }
 }
 
-function startEffects(){
-    let step = 0, total = 50;
+function startParty(){
+// luces + destellos al mismo tiempo
+createRays();
+createGlows();
+setInterval(() => {
+    createRays();
+    createGlows();
+}, 2000);
 
-    let fade = setInterval(() =>{
-        step++;
-        let p = step/total;
+// partículas por separado como antes
+createParticles();
+setInterval(createParticles, 1000);
 
-        // Efecto de luz en el marco
-        container.style.boxShadow = `0 0 ${p*25}px #d8c9a7,0 0 ${p*40}px #d8c9a7 inset`;
-
-        // Oscurecer el fondo gradualmente
-        body.style.backgroundColor = `rgb(${26-p*10},${26-p*10},${26-p*10})`;
-
-        // Degradado azul marino aparece al mismo tiempo
-        overlay.style.opacity = p;
-
-        if(step>=total){
-            clearInterval(fade);
-            party(); // Aquí inicia la fiesta
-        }
-    },100);
-}
-
-
-function party(){
-    setInterval(()=>{
-        createRays();
-        createFlashes();
-    }, 800);
-
-    setInterval(createParticles, 600);
 }
 
 function createRays(){
-    for(let i=0; i<12; i++){
+    for(let i=0;i<15;i++){
         const ray = document.createElement("div");
         ray.className = "lightRay";
+        let angle = Math.random()*360;
+        ray.style.setProperty("--angle", angle+"deg");
         ray.style.left = `${Math.random()*100}%`;
         ray.style.top = `${Math.random()*100}%`;
-        ray.style.setProperty("--angle", `${Math.random()*360}deg`);
-        ray.style.background = coloresLuces[Math.floor(Math.random()*coloresLuces.length)];
         body.appendChild(ray);
         setTimeout(()=>ray.remove(),1500);
     }
 }
 
-function createFlashes(){
-    for(let i=0;i<3;i++){
-        const f = document.createElement("div");
-        f.className = "flash";
-        f.style.left = `${Math.random()*100}%`;
-        f.style.top = `${Math.random()*100}%`;
-        f.style.background = coloresCirculos[Math.floor(Math.random()*coloresCirculos.length)];
-        body.appendChild(f);
-        setTimeout(()=>f.remove(),2000);
+function createParticles(){
+    const types = ["star","heart","circle"];
+    const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
+    const heartColors = ["#FF0000", "#00FFFF"];
+
+    for(let i=0;i<10;i++){
+        const p = document.createElement("div");
+        const type = types[Math.floor(Math.random()*types.length)];
+        p.className = "particle "+type;
+        p.style.left = `${Math.random()*100}%`;
+        p.style.top = `${Math.random()*100}%`;
+        p.style.width = `${5+Math.random()*15}px`;
+        p.style.height = p.style.width;
+        p.style.opacity = Math.random();
+
+        if(type==="circle"){
+            p.style.background = circleColors[Math.floor(Math.random()*circleColors.length)];
+            // Duplicar círculos
+            const p2 = p.cloneNode();
+            p2.style.left = `${Math.random()*100}%`;
+            p2.style.top = `${Math.random()*100}%`;
+            body.appendChild(p2);
+            setTimeout(()=>p2.remove(),5000);
+        } else if(type==="heart"){
+            p.style.background = heartColors[Math.floor(Math.random()*heartColors.length)];
+        }
+
+        body.appendChild(p);
+        setTimeout(()=>p.remove(),5000);
     }
 }
 
+function createGlows() {
+    for(let i=0;i<5;i++){
+        const glow = document.createElement("div");
+        glow.className = "lightGlow";
+        glow.style.left = `${Math.random()*100}%`;
+        glow.style.top = `${Math.random()*100}%`;
+        glow.style.width = `${50 + Math.random()*150}px`;
+        glow.style.height = glow.style.width;
+        body.appendChild(glow);
+        setTimeout(()=>glow.remove(), 2000);
+    }
+}
 </script>
 
 </body>
 </html>
-
-

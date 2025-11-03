@@ -240,7 +240,7 @@ createGlows();
 setInterval(() => {
     createRays();
     createGlows();
-}, 1942);
+}, 1945);
 
 // partículas por separado como antes
 createParticles();
@@ -318,13 +318,14 @@ function createGlows() {
         glow.style.background = `radial-gradient(circle, ${color}80 0%, rgba(255,255,255,0) 70%)`;
 
         body.appendChild(glow);
-        setTimeout(() => glow.remove(), 2000);
+        setTimeout(() => glow.remove(), 3000);
     }
 }
 </script>
 
 </body>
 </html>
+
 
 
 

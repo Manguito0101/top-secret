@@ -218,12 +218,18 @@ function toggleMusica() {
 }
 
 function startParty(){
+    // luces + destellos al mismo tiempo
+createRays();
+createGlows();
+setInterval(() => {
     createRays();
-    setInterval(createRays, 2000);
-    createParticles();
-    setInterval(createParticles, 1000);
     createGlows();
-    setInterval(createGlows, 1500);
+}, 2000);
+
+// partículas por separado como antes
+createParticles();
+setInterval(createParticles, 1000);
+
 }
 
 function createRays(){
@@ -287,3 +293,4 @@ function createGlows() {
 
 </body>
 </html>
+

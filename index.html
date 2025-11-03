@@ -291,7 +291,8 @@ function createParticles(){
     const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
     const heartColors = ["#FF0000", "#00FFFF"];
 
-    for(let i=0;i<10;i++){
+    for (let i = 0; i < 80; i++) { // muchas más partículas
+
         const p = document.createElement("div");
         const type = types[Math.floor(Math.random()*types.length)];
         p.className = "particle "+type;
@@ -342,6 +343,7 @@ function createGlows() {
 
 </body>
 </html>
+
 
 
 

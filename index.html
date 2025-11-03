@@ -94,22 +94,21 @@ audio {
     100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
 }
 
-/* Triángulos de luz */
-.lightTriangle {
+/* Luz hacia adentro */
+.lightRay {
     position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 150px solid rgba(255,255,255,0.3);
+    width: 2px;
+    height: 100px;
+    background: rgba(255,255,255,0.5);
+    transform-origin: bottom center;
     z-index: 0;
     opacity: 0;
-    animation: moveTriangle 1s linear forwards;
+    animation: rayMove 1.5s linear forwards;
 }
 
-@keyframes moveTriangle {
-    0% { transform: translate(var(--startX), var(--startY)) rotate(var(--angle)); opacity: 1; }
-    100% { transform: translate(var(--endX), var(--endY)) rotate(var(--angle)); opacity: 0; }
+@keyframes rayMove {
+    0% { transform: scaleY(0) rotate(0deg); opacity: 1; }
+    100% { transform: scaleY(3) rotate(var(--angle)); opacity: 0; }
 }
 </style>
 </head>
@@ -199,53 +198,23 @@ function toggleMusica() {
 }
 
 function startParty(){
-    createTriangles();
-    setInterval(createTriangles, 1500);
+    createRays();
+    setInterval(createRays, 2000);
     createParticles();
     setInterval(createParticles, 1000);
 }
 
-// Triángulos desde los bordes hacia el centro
-function createTriangles(){
-    const edges = ['top','bottom','left','right'];
-    for(let i=0;i<10;i++){
-        const triangle = document.createElement("div");
-        triangle.className = "lightTriangle";
-        const edge = edges[Math.floor(Math.random()*edges.length)];
-        let startX, startY, endX, endY;
-        switch(edge){
-            case 'top':
-                startX = Math.random()*window.innerWidth;
-                startY = -150;
-                endX = startX - window.innerWidth/2 + 175;
-                endY = window.innerHeight/2 - 75;
-                break;
-            case 'bottom':
-                startX = Math.random()*window.innerWidth;
-                startY = window.innerHeight + 150;
-                endX = startX - window.innerWidth/2 + 175;
-                endY = window.innerHeight/2 - 75;
-                break;
-            case 'left':
-                startX = -50;
-                startY = Math.random()*window.innerHeight;
-                endX = window.innerWidth/2 - 175;
-                endY = startY - window.innerHeight/2 + 75;
-                break;
-            case 'right':
-                startX = window.innerWidth + 50;
-                startY = Math.random()*window.innerHeight;
-                endX = window.innerWidth/2 - 175;
-                endY = startY - window.innerHeight/2 + 75;
-                break;
-        }
-        triangle.style.setProperty('--startX', startX+'px');
-        triangle.style.setProperty('--startY', startY+'px');
-        triangle.style.setProperty('--endX', endX+'px');
-        triangle.style.setProperty('--endY', endY+'px');
-        triangle.style.setProperty('--angle', Math.random()*360+'deg');
-        body.appendChild(triangle);
-        setTimeout(()=>triangle.remove(),1000);
+// Rayos desde todos lados hacia el centro
+function createRays(){
+    for(let i=0;i<15;i++){
+        const ray = document.createElement("div");
+        ray.className = "lightRay";
+        let angle = Math.random()*360;
+        ray.style.setProperty("--angle", angle+"deg");
+        ray.style.left = `${Math.random()*100}%`;
+        ray.style.top = `${Math.random()*100}%`;
+        body.appendChild(ray);
+        setTimeout(()=>ray.remove(),1500);
     }
 }
 

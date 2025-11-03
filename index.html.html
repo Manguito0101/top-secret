@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Acceso Secreto</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #f5f5dc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        border: 3px solid #d8c9a7;
+        text-align: center;
+        width: 350px;
+    }
+    input {
+        padding: 10px;
+        margin: 10px 0;
+        width: 90%;
+        border: 2px solid #d8c9a7;
+        border-radius: 5px;
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #d8c9a7;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+    #mensaje, #zonaPersonal {
+        margin-top: 15px;
+        font-size: 18px;
+    }
+    #gif {
+        margin-top: 20px;
+        display: none;
+        width: 250px;
+        border-radius: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #musicaArea {
+        display: none;
+        margin-top: 20px;
+    }
+    /* Para ocultar controles del audio */
+    audio {
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ingrese la contraseña:</h2>
+    <input type="password" id="password">
+    <button onclick="verificarContraseña()">Aceptar</button>
+
+    <p id="zonaPersonal" style="display:none;">
+        🎉 ¡Mensaje personalizado aquí! 🎉
+    </p>
+
+    <p id="mensaje"></p>
+    <img id="gif">
+
+    <!-- Área de música -->
+    <div id="musicaArea">
+        <p>PONLE MUSICA A MIKU!!!1!1!! (yo)</p>
+        <button onclick="toggleMusica()" id="btnMusica">▶ Reproducir</button>
+    </div>
+
+    <!-- Audio oculto -->
+    <audio id="musica" src="mikuSong.mp3"></audio>
+
+</div>
+
+<script>
+    const input = document.getElementById("password");
+    const musica = document.getElementById("musica");
+    const musicaArea = document.getElementById("musicaArea");
+    const botonMusica = document.getElementById("btnMusica");
+
+    input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            verificarContraseña();
+        }
+    });
+
+    function verificarContraseña() {
+        const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
+        const mensaje = document.getElementById("mensaje");
+        const gif = document.getElementById("gif");
+        const zonaPersonal = document.getElementById("zonaPersonal");
+
+        if (input.value === claveCorrecta) {
+            mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
+            zonaPersonal.style.display = "block";
+            gif.style.display = "block";
+            gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
+            input.disabled = true;
+
+            musicaArea.style.display = "block"; // Mostrar botón de música
+        } else {
+            mensaje.textContent = "❌ Contraseña incorrecta ❌";
+            zonaPersonal.style.display = "none";
+            gif.style.display = "block";
+            gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
+
+            musica.pause();
+            musica.currentTime = 0;
+            musicaArea.style.display = "none";
+
+            botonMusica.textContent = "▶ Reproducir";
+        }
+    }
+
+    function toggleMusica() {
+        if (musica.paused) {
+            musica.play();
+            botonMusica.textContent = "⏸ Pausar";
+        } else {
+            musica.pause();
+            botonMusica.textContent = "▶ Reproducir";
+        }
+    }
+</script>
+
+</body>
+</html>

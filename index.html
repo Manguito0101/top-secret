@@ -72,23 +72,43 @@ audio {
     display: none;
 }
 
-/* Luces de fiesta */
-.light {
+/* Partículas y luces */
+.particle {
     position: absolute;
-    top: 0;
-    left: 50%;
-    width: 4px;
-    height: 200px;
-    background: rgba(255, 255, 200, 0.5);
-    transform-origin: bottom center;
-    opacity: 0;
-    animation: lightMove 2s linear infinite;
+    width: 10px;
+    height: 10px;
+    opacity: 0.8;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: float 5s linear infinite;
 }
 
-@keyframes lightMove {
-    0% { transform: rotate(0deg); opacity: 1; }
-    50% { transform: rotate(45deg); opacity: 0.5; }
-    100% { transform: rotate(-45deg); opacity: 0; }
+.star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: gold; }
+.heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); background: pink; }
+.circle { background: cyan; }
+
+@keyframes float {
+    0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
+}
+
+/* Luz hacia adentro */
+.lightRay {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: rgba(255,255,255,0.5);
+    transform-origin: bottom center;
+    z-index: 0;
+    opacity: 0;
+    animation: rayMove 1.5s linear forwards;
+}
+
+@keyframes rayMove {
+    0% { transform: scaleY(0) rotate(0deg); opacity: 1; }
+    100% { transform: scaleY(3) rotate(var(--angle)); opacity: 0; }
 }
 </style>
 </head>
@@ -156,28 +176,20 @@ function toggleMusica() {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
 
-        // Gradual neon + fondo + luces
-        container.style.boxShadow = "0 0 0px #d8c9a7";
-        body.style.backgroundColor = "#1a1a1a";
-
+        // Gradual neon + fondo
         let step = 0;
         const steps = 50;
         const interval = setInterval(() => {
             step++;
-            // Progreso 0-1
             let progress = step/steps;
-            // Neon gradual
             container.style.boxShadow = `0 0 ${progress*25}px #d8c9a7, 0 0 ${progress*40}px #d8c9a7 inset`;
-            // Fondo oscurece
-            let colorValue = 26 - progress*10; // 26->16 aprox
+            let colorValue = 26 - progress*10;
             body.style.backgroundColor = `rgb(${colorValue},${colorValue},${colorValue})`;
             if(step>=steps){
                 clearInterval(interval);
-                // Una vez terminado, generar luces
-                createLights();
-                setInterval(createLights, 2500);
+                startParty();
             }
-        }, 100); // 50 pasos *100ms = 5 segundos
+        }, 100);
 
     } else {
         musica.pause();
@@ -185,14 +197,42 @@ function toggleMusica() {
     }
 }
 
-function createLights(){
-    const light = document.createElement("div");
-    light.className = "light";
-    light.style.left = `${Math.random()*100}%`;
-    light.style.animationDuration = `${1.5 + Math.random()*1}s`;
-    light.style.transform = `rotate(${Math.random()*90 - 45}deg)`;
-    body.appendChild(light);
-    setTimeout(()=>light.remove(), 3000 + Math.random()*2000);
+function startParty(){
+    createRays();
+    setInterval(createRays, 2000);
+    createParticles();
+    setInterval(createParticles, 1000);
+}
+
+// Rayos desde todos lados hacia el centro
+function createRays(){
+    for(let i=0;i<15;i++){
+        const ray = document.createElement("div");
+        ray.className = "lightRay";
+        let angle = Math.random()*360;
+        ray.style.setProperty("--angle", angle+"deg");
+        ray.style.left = `${Math.random()*100}%`;
+        ray.style.top = `${Math.random()*100}%`;
+        body.appendChild(ray);
+        setTimeout(()=>ray.remove(),1500);
+    }
+}
+
+// Partículas aleatorias (estrellas, corazones, círculos)
+function createParticles(){
+    const types = ["star","heart","circle"];
+    for(let i=0;i<10;i++){
+        const p = document.createElement("div");
+        const type = types[Math.floor(Math.random()*types.length)];
+        p.className = "particle "+type;
+        p.style.left = `${Math.random()*100}%`;
+        p.style.top = `${Math.random()*100}%`;
+        p.style.width = `${5+Math.random()*15}px`;
+        p.style.height = p.style.width;
+        p.style.opacity = Math.random();
+        body.appendChild(p);
+        setTimeout(()=>p.remove(),5000);
+    }
 }
 </script>
 

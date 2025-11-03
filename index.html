@@ -4,295 +4,291 @@
 <meta charset="UTF-8">
 <title>TOP SECRET</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #f5f5dc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-    transition: background-color 5s linear;
-}
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #f5f5dc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+    }
+    .container {
+        background-color: #2a2a2a;
+        padding: 20px;
+        border-radius: 10px;
+        border: 3px solid #d8c9a7;
+        text-align: center;
+        width: 350px;
+        position: relative;
+        z-index: 10;
+        transition: background 3s ease, border-color 3s ease;
+    }
+    input {
+        padding: 10px;
+        margin: 10px 0;
+        width: 90%;
+        border: 2px solid #d8c9a7;
+        border-radius: 5px;
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #d8c9a7;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+    #gif {
+        margin-top: 20px;
+        display: none;
+        width: 250px;
+        border-radius: 10px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #musicaArea {
+        display: none;
+        margin-top: 20px;
+    }
 
-/* 🎆 Caja central */
-.container {
-    background-color: #2a2a2a;
-    padding: 20px;
-    border-radius: 10px;
-    border: 3px solid #d8c9a7;
-    text-align: center;
-    width: 350px;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 0 0px #d8c9a7;
-    transition: box-shadow 5s ease;
-}
+    /* 🔥 EFECTO FIESTA 🔥 */
+    .dark-mode {
+        background-color: #000 !important;
+    }
 
-input {
-    padding: 10px;
-    margin: 10px 0;
-    width: 90%;
-    border: 2px solid #d8c9a7;
-    border-radius: 5px;
-    background-color: #1a1a1a;
-    color: #fff;
-}
+    .neon-border {
+        border: 3px solid transparent;
+        animation: neon 3s infinite linear;
+    }
+    @keyframes neon {
+        0% { box-shadow: 0 0 10px #32f5ff; }
+        25% { box-shadow: 0 0 15px #ff3e3e; }
+        50% { box-shadow: 0 0 15px #32ff7e; }
+        75% { box-shadow: 0 0 15px #00c8ff; }
+        100% { box-shadow: 0 0 10px #32f5ff; }
+    }
 
-button {
-    padding: 10px 20px;
-    background-color: #d8c9a7;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
+    /* 🎇 PARTICULAS */
+    .particle, .star, .heart, .big-flare {
+        position: fixed;
+        pointer-events: none;
+        animation-timing-function: linear;
+    }
 
-#mensaje, #zonaPersonal {
-    margin-top: 15px;
-    font-size: 18px;
-}
+    .particle {
+        width: 6px;
+        height: 6px;
+        background: var(--color);
+        border-radius: 50%;
+        animation-name: float;
+        animation-duration: var(--duration);
+        animation-iteration-count: infinite;
+    }
+    @keyframes float {
+        from { transform: translateY(110vh) translateX(var(--start-x)); }
+        to { transform: translateY(-10vh) translateX(var(--end-x)); }
+    }
 
-#gif {
-    margin-top: 20px;
-    display: none;
-    width: 250px;
-    border-radius: 10px;
-    margin-left: auto;
-    margin-right: auto;
-}
+    .heart {
+        width: 14px;
+        height: 14px;
+        background: var(--color);
+        clip-path: polygon(50% 0%, 61% 16%, 84% 18%, 99% 34%, 92% 61%, 50% 100%, 8% 61%, 1% 34%, 16% 18%, 39% 16%);
+        animation-name: floatHearts;
+        animation-duration: var(--duration);
+        animation-iteration-count: infinite;
+    }
+    @keyframes floatHearts {
+        from { transform: translateY(110vh) scale(1); opacity:1; }
+        to { transform: translateY(-10vh) scale(1.5); opacity:0; }
+    }
 
-#musicaArea {
-    display: none;
-    margin-top: 20px;
-}
+    .star {
+        width: 12px;
+        height: 12px;
+        background: var(--color);
+        clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+        animation: starFloat var(--duration) infinite linear;
+    }
+    @keyframes starFloat {
+        0% { opacity: 0; transform: translateY(110vh) rotate(0deg); }
+        10% { opacity: 1; }
+        100% { opacity: 0; transform: translateY(-10vh) rotate(180deg); }
+    }
 
-audio {
-    display: none;
-}
+    /* ✨ DESTELLOS GRANDES */
+    .big-flare {
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, var(--color) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: flareAnim 3s infinite ease-out;
+        opacity: 0;
+    }
+    @keyframes flareAnim {
+        0% { opacity: 0; transform: scale(0.5); }
+        50% { opacity: 1; }
+        100% { opacity: 0; transform: scale(2); }
+    }
 
-/* 🎇 PARTICULAS */
-.particle {
-    position: absolute;
-    opacity: .8;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 1;
-    animation: float 5s linear infinite;
-}
-
-.star {
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 
-    79% 91%, 50% 70%, 21% 91%, 32% 57%, 
-    2% 35%, 39% 35%);
-    background: gold;
-}
-
-.heartRed {
-    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 
-    50% 90%, 2% 30%, 39% 0%, 50% 15%);
-    background: red;
-}
-
-.heartCyan {
-    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 
-    50% 90%, 2% 30%, 39% 0%, 50% 15%);
-    background: cyan;
-}
-
-.circle {
-    background: cyan;
-}
-
-@keyframes float {
-    0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translate(0,-200px) rotate(360deg); opacity: 0; }
-}
-
-/* ✨ DESTELLOS GRANDES */
-.lightGlow {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
-    opacity: .25;
-    filter: blur(25px);
-    z-index: 0;
-    animation: glowAnim 2s linear forwards;
-}
-
-@keyframes glowAnim {
-    0% { transform: scale(.2); opacity: .15; }
-    100% { transform: scale(1.8); opacity: 0; }
-}
-
-/* 🔥 LUCES RAYOS */
-.lightRay {
-    position: absolute;
-    width: 5px;
-    height: 280px;
-    transform-origin: bottom center;
-    z-index: 0;
-    opacity: 0;
-    animation: rayMove 1.5s linear forwards;
-}
-
-@keyframes rayMove {
-    0% { transform: scaleY(0) rotate(0deg); opacity: .7; }
-    100% { transform: scaleY(3) rotate(var(--angle)); opacity: 0; }
-}
+    /* 🔺 LUCES TRIANGULARES GRANDES */
+    .light-beam {
+        position: fixed;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        opacity: 0.8;
+        animation: lightAnim 3s infinite linear;
+    }
+    @keyframes lightAnim {
+        0% { opacity:0; transform:scale(0.2); }
+        50% { opacity:1; transform:scale(1); }
+        100% { opacity:0; transform:scale(0.2); }
+    }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="contenedor">
     <h2>Ingrese la contraseña:</h2>
     <input type="password" id="password">
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 OLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
+        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA ❤️
     </p>
 
     <p id="mensaje"></p>
     <img id="gif">
 
     <div id="musicaArea">
-        <p>🎶 - PONLE MUSICA A MIKU!!!1!1!! (yo) - 🎵</p>
+        <p>PONLE MUSICA A MIKU!!!1!1!! (yo)</p>
         <button onclick="toggleMusica()" id="btnMusica">▶ Reproducir</button>
     </div>
 
     <audio id="musica" src="mikuSong.mp3"></audio>
 </div>
 
-
 <script>
-const input = document.getElementById("password");
-const musica = document.getElementById("musica");
-const botonMusica = document.getElementById("btnMusica");
-const gif = document.getElementById("gif");
-const zonaPersonal = document.getElementById("zonaPersonal");
-const mensaje = document.getElementById("mensaje");
-const musicaArea = document.getElementById("musicaArea");
-const container = document.querySelector(".container");
-const body = document.body;
+    const input = document.getElementById("password");
+    const musica = document.getElementById("musica");
+    const contenedor = document.getElementById("contenedor");
+    const musicaArea = document.getElementById("musicaArea");
+    const botonMusica = document.getElementById("btnMusica");
 
-input.addEventListener("keydown", e => { if (e.key === "Enter") verificarContraseña(); });
+    let fiestaActiva = false;
 
-function verificarContraseña() {
-    const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
+    input.addEventListener("keydown", e => e.key === "Enter" && verificarContraseña());
 
-    if (input.value === claveCorrecta) {
-        mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
-        zonaPersonal.style.display = "block";
-        gif.style.display = "block";
-        gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
-        input.disabled = true;
-        musicaArea.style.display = "block";
-    } else {
-        mensaje.textContent = "❌ Contraseña incorrecta ❌";
-        zonaPersonal.style.display = "none";
-        gif.style.display = "block";
-        gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
-        musica.pause();
-        musica.currentTime = 0;
-        musicaArea.style.display = "none";
-        botonMusica.textContent = "▶ Reproducir";
-    }
-}
+    function verificarContraseña() {
+        const claveCorrecta =
+        "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
 
-function toggleMusica() {
-    if (musica.paused) {
-        musica.play();
-        botonMusica.textContent = "⏸ Pausar";
+        if (input.value === claveCorrecta) {
+            document.getElementById("mensaje").textContent = "✅ ¡Contraseña correcta! 🥭";
+            document.getElementById("zonaPersonal").style.display = "block";
+            document.getElementById("gif").style.display = "block";
+            document.getElementById("gif").src =
+            "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
 
-        let step = 0;
-        let interval = setInterval(()=>{
-            step++;
-            if(step>=50){ clearInterval(interval); startParty(); }
-        },100);
-
-    } else {
-        musica.pause();
-        botonMusica.textContent = "▶ Reproducir";
-    }
-}
-
-function startParty(){
-    createRays();
-    createGlows();
-    setInterval(()=>{
-        createRays();
-        createGlows();
-    },2000);
-
-    createParticles();
-    setInterval(createParticles,1000);
-}
-
-/* 🌈 COLORES */
-const circleColors = [
-    "#00ff00","#1aff1a","#0077ff","#66ccff",
-    "#0040ff","#b300ff","#cc66ff","#ffff00",
-    "#ff9900","#ffcc66","#ffffff"
-];
-
-function randomColor(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
-/* 🌟 DESTELLOS GRANDES */
-function createGlows(){
-    for(let i=0;i<10;i++){
-        const glow=document.createElement("div");
-        glow.className="lightGlow";
-        glow.style.width=glow.style.height=(120+Math.random()*180)+"px";
-        glow.style.left=Math.random()*100+"%";
-        glow.style.top=Math.random()*100+"%";
-        glow.style.background=randomColor(circleColors);
-        body.appendChild(glow);
-        setTimeout(()=>glow.remove(),2000);
-    }
-}
-
-/* 💥 RAYOS */
-function createRays(){
-    for(let i=0;i<15;i++){
-        const ray=document.createElement("div");
-        ray.className="lightRay";
-        ray.style.background=randomColor(circleColors);
-        ray.style.setProperty("--angle", Math.random()*360+"deg");
-        ray.style.left=Math.random()*100+"%";
-        ray.style.top=Math.random()*100+"%";
-        body.appendChild(ray);
-        setTimeout(()=>ray.remove(),1500);
-    }
-}
-
-/* 🎊 PARTICULAS */
-function createParticles(){
-    for(let i=0;i<30;i++){
-        const p=document.createElement("div");
-        let type=Math.floor(Math.random()*3);
-
-        if(type===0){ p.className="particle star"; }
-        if(type===1){
-            p.className="particle "+(Math.random()<.5?"heartRed":"heartCyan");
+            musicaArea.style.display = "block";
+            input.disabled = true;
+        } else {
+            document.getElementById("mensaje").textContent = "❌ Contraseña incorrecta ❌";
         }
-        if(type===2){
-            p.className="particle circle";
-            p.style.background=randomColor(circleColors);
+    }
+
+    function toggleMusica() {
+        if (musica.paused) {
+            musica.play();
+            botonMusica.textContent = "⏸ Pausar";
+
+            if (!fiestaActiva) activarFiesta();
+        } else {
+            musica.pause();
+            botonMusica.textContent = "▶ Reproducir";
+        }
+    }
+
+    function activarFiesta() {
+        fiestaActiva = true;
+
+        setTimeout(() => {
+            document.body.classList.add("dark-mode");
+            contenedor.classList.add("neon-border");
+
+            crearEfectos();
+        }, 500); 
+    }
+
+    function crearEfectos() {
+        const colores = ["#ff3e3e", "#00f7ff", "#32ff7e", "#c43bff", "#ffb52e", "#32f5ff"];
+
+        // Muchas partículas
+        for (let i = 0; i < 100; i++) {
+            crearParticula(colores[Math.floor(Math.random()*colores.length)]);
+            if (i % 3 === 0) crearCorazon();
+            if (i % 4 === 0) crearEstrella();
         }
 
-        let s = 5 + Math.random()*20;
-        p.style.width = p.style.height = s+"px";
-        p.style.left=Math.random()*100+"%";
-        p.style.top=Math.random()*100+"%";
-        p.style.opacity=Math.random();
-        body.appendChild(p);
-        setTimeout(()=>p.remove(),5000);
+        // Mucho destello
+        for (let i = 0; i < 12; i++) {
+            crearDestello(colores[Math.floor(Math.random()*colores.length)]);
+            crearLuzTriangular(colores[Math.floor(Math.random()*colores.length)]);
+        }
     }
-}
+
+    function crearParticula(color) {
+        const p = document.createElement("div");
+        p.className = "particle";
+        p.style.setProperty("--color", color);
+        p.style.setProperty("--start-x", `${Math.random()*100}vw`);
+        p.style.setProperty("--end-x", `${Math.random()*100}vw`);
+        p.style.setProperty("--duration", `${4+Math.random()*4}s`);
+        document.body.appendChild(p);
+    }
+
+    function crearCorazon() {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.style.setProperty("--color", Math.random() > 0.5 ? "#ff3e9c" : "#00f7ff");
+        h.style.left = `${Math.random()*100}vw`;
+        h.style.setProperty("--duration", `${6+Math.random()*5}s`);
+        document.body.appendChild(h);
+    }
+
+    function crearEstrella() {
+        const s = document.createElement("div");
+        s.className = "star";
+        s.style.setProperty("--color", "#ffffff");
+        s.style.left = `${Math.random()*100}vw`;
+        s.style.setProperty("--duration", `${5+Math.random()*4}s`);
+        document.body.appendChild(s);
+    }
+
+    function crearDestello(color) {
+        const d = document.createElement("div");
+        d.className = "big-flare";
+        d.style.setProperty("--color", color);
+        d.style.left = `${Math.random()*100}vw`;
+        d.style.top = `${Math.random()*100}vh`;
+        document.body.appendChild(d);
+    }
+
+    function crearLuzTriangular(color) {
+        const l = document.createElement("div");
+        l.className = "light-beam";
+        l.style.borderWidth = `0 80px 120px 80px`;
+        l.style.borderColor = `transparent transparent ${color} transparent`;
+        l.style.left = `${Math.random()*100}vw`;
+        l.style.top = `${Math.random()*100}vh`;
+        document.body.appendChild(l);
+    }
 </script>
 
 </body>

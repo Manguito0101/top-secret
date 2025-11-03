@@ -26,7 +26,7 @@ body {
     width: 350px;
     position: relative;
     z-index: 2;
-    box-shadow: 0 0 0px #d8c9a7; /* inicio sin neon */
+    box-shadow: 0 0 0px #d8c9a7;
     transition: box-shadow 5s ease;
 }
 
@@ -75,11 +75,11 @@ audio {
 /* Luces de fiesta */
 .light {
     position: absolute;
-    top: -50px;
+    top: 0;
     left: 50%;
     width: 4px;
     height: 200px;
-    background: rgba(255, 255, 200, 0.6);
+    background: rgba(255, 255, 200, 0.5);
     transform-origin: bottom center;
     opacity: 0;
     animation: lightMove 2s linear infinite;
@@ -125,7 +125,7 @@ const mensaje = document.getElementById("mensaje");
 const container = document.querySelector(".container");
 const body = document.body;
 
-input.addEventListener("keydown", function(event) {
+input.addEventListener("keydown", event => {
     if (event.key === "Enter") verificarContraseña();
 });
 
@@ -156,17 +156,28 @@ function toggleMusica() {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
 
-        // Después de 5 segundos activamos neón y oscurecemos el fondo gradualmente
-        let duration = 5000;
-        container.style.transition = `box-shadow ${duration}ms ease`;
-        body.style.transition = `background-color ${duration}ms ease`;
-        setTimeout(() => {
-            container.style.boxShadow = "0 0 25px #d8c9a7, 0 0 40px #d8c9a7 inset";
-            body.style.backgroundColor = "#111111";
+        // Gradual neon + fondo + luces
+        container.style.boxShadow = "0 0 0px #d8c9a7";
+        body.style.backgroundColor = "#1a1a1a";
 
-            // Crear luces de fiesta
-            createLights();
-        }, duration);
+        let step = 0;
+        const steps = 50;
+        const interval = setInterval(() => {
+            step++;
+            // Progreso 0-1
+            let progress = step/steps;
+            // Neon gradual
+            container.style.boxShadow = `0 0 ${progress*25}px #d8c9a7, 0 0 ${progress*40}px #d8c9a7 inset`;
+            // Fondo oscurece
+            let colorValue = 26 - progress*10; // 26->16 aprox
+            body.style.backgroundColor = `rgb(${colorValue},${colorValue},${colorValue})`;
+            if(step>=steps){
+                clearInterval(interval);
+                // Una vez terminado, generar luces
+                createLights();
+                setInterval(createLights, 2500);
+            }
+        }, 100); // 50 pasos *100ms = 5 segundos
 
     } else {
         musica.pause();
@@ -175,20 +186,13 @@ function toggleMusica() {
 }
 
 function createLights(){
-    for(let i=0; i<10; i++){
-        const light = document.createElement("div");
-        light.className = "light";
-        light.style.left = `${Math.random()*100}%`;
-        light.style.animationDuration = `${1.5 + Math.random()*1}s`;
-        light.style.transform = `rotate(${Math.random()*90 - 45}deg)`;
-        body.appendChild(light);
-
-        // Remover después de un tiempo
-        setTimeout(()=> light.remove(), 3000 + Math.random()*2000);
-    }
-
-    // Generar más luces cada cierto tiempo
-    setInterval(()=>createLights(), 2500);
+    const light = document.createElement("div");
+    light.className = "light";
+    light.style.left = `${Math.random()*100}%`;
+    light.style.animationDuration = `${1.5 + Math.random()*1}s`;
+    light.style.transform = `rotate(${Math.random()*90 - 45}deg)`;
+    body.appendChild(light);
+    setTimeout(()=>light.remove(), 3000 + Math.random()*2000);
 }
 </script>
 

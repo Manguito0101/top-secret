@@ -55,7 +55,6 @@
         display: none;
         margin-top: 20px;
     }
-    /* Para ocultar controles del audio */
     audio {
         display: none;
     }
@@ -75,13 +74,11 @@
     <p id="mensaje"></p>
     <img id="gif">
 
-    <!-- Área de música -->
     <div id="musicaArea">
         <p>PONLE MUSICA A MIKU!!!1!1!! (yo)</p>
         <button onclick="toggleMusica()" id="btnMusica">▶ Reproducir</button>
     </div>
 
-    <!-- Audio oculto -->
     <audio id="musica" src="mikuSong.mp3"></audio>
 
 </div>
@@ -111,7 +108,7 @@
             gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
             input.disabled = true;
 
-            musicaArea.style.display = "block"; // Mostrar botón de música
+            musicaArea.style.display = "block";
         } else {
             mensaje.textContent = "❌ Contraseña incorrecta ❌";
             zonaPersonal.style.display = "none";
@@ -139,5 +136,6 @@
 
 </body>
 </html>
+
 
 

@@ -130,6 +130,25 @@ audio {
     50% { transform: scale(1.5); opacity: 0.4; }
     100% { transform: scale(2); opacity: 0; }
 }
+/* ⭐ Estrellas lentas de fondo */
+.backgroundStar {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    opacity: 0.3;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: starFloat 12s linear forwards;
+}
+
+@keyframes starFloat {
+    0% { transform: translateY(0); opacity: 0.1; }
+    50% { opacity: 0.5; }
+    100% { transform: translateY(-300px); opacity: 0; }
+}
+  
 </style>
 </head>
 <body>
@@ -246,6 +265,10 @@ setInterval(() => {
 createParticles();
 setInterval(createParticles, 1000);
 
+    // ⭐ Estrellas del fondo → se activan al mismo tiempo que las partículas
+    createBackgroundStars();
+    setInterval(createBackgroundStars, 3000);
+
 }
 
 function createRays() {
@@ -321,8 +344,21 @@ function createGlows() {
         setTimeout(() => glow.remove(), 2000);
     }
 }
+    function createBackgroundStars() {
+    for (let i = 0; i < 5; i++) {
+        const star = document.createElement("div");
+        star.className = "backgroundStar";
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${100 + Math.random() * 20}%`; // Inician abajo del todo
+
+        body.appendChild(star);
+        setTimeout(() => star.remove(), 12000);
+    }
+}
+
 </script>
 
 </body>
 </html>
+
 

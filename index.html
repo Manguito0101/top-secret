@@ -188,8 +188,16 @@ input.addEventListener("keydown", event => {
     if (event.key === "Enter") verificarContraseña();
 });
 
+let falloIndex = 0;
+
 function verificarContraseña() {
     const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
+
+    const gifsError = [
+        "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif",
+        "https://media.tenor.com/2HODPmEFNcoAAAAM/tripple-baka-akita-neru.gif",
+        "https://i.pinimg.com/originals/f1/b8/4f/f1b84f7cb7186c15f2a999efb06c3a01.gif"
+    ];
 
     if (input.value === claveCorrecta) {
         mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
@@ -202,13 +210,17 @@ function verificarContraseña() {
         mensaje.textContent = "❌ Contraseña incorrecta ❌";
         zonaPersonal.style.display = "none";
         gif.style.display = "block";
-        gif.src = "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
+
+        gif.src = gifsError[falloIndex]; // Selección del gif en orden
+        falloIndex = (falloIndex + 1) % gifsError.length; // Avanzar y reiniciar al llegar al final
+
         musica.pause();
         musica.currentTime = 0;
         musicaArea.style.display = "none";
         botonMusica.textContent = "▶ Reproducir";
     }
 }
+
 
 function toggleMusica() {
     if (musica.paused) {
@@ -360,6 +372,7 @@ function createGlows() {
 
 </body>
 </html>
+
 
 
 

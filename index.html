@@ -84,17 +84,9 @@ audio {
     animation: float 5s linear infinite;
 }
 
-.star { 
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); 
-    background: gold; 
-}
-.heart { 
-    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); 
-    background: #ff0000; /* Rojo intenso */ 
-}
-.circle { 
-    background: green; /* este color será reemplazado dinámicamente */ 
-}
+.star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: gold; }
+.heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); }
+.circle { border-radius: 50%; }
 
 @keyframes float {
     0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
@@ -118,6 +110,26 @@ audio {
     0% { transform: scaleY(0) rotate(0deg); opacity: 1; }
     100% { transform: scaleY(3) rotate(var(--angle)); opacity: 0; }
 }
+
+/* Destellos circulares grandes difuminados */
+.lightGlow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+    width: 100px;
+    height: 100px;
+    transform: scale(0);
+    animation: glowMove 2s forwards;
+}
+
+@keyframes glowMove {
+    0% { transform: scale(0); opacity: 0.7; }
+    50% { transform: scale(1.5); opacity: 0.4; }
+    100% { transform: scale(2); opacity: 0; }
+}
 </style>
 </head>
 <body>
@@ -128,7 +140,7 @@ audio {
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 OLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
+        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
     </p>
 
     <p id="mensaje"></p>
@@ -210,9 +222,10 @@ function startParty(){
     setInterval(createRays, 2000);
     createParticles();
     setInterval(createParticles, 1000);
+    createGlows();
+    setInterval(createGlows, 1500);
 }
 
-// Rayos desde todos lados hacia el centro
 function createRays(){
     for(let i=0;i<15;i++){
         const ray = document.createElement("div");
@@ -226,11 +239,10 @@ function createRays(){
     }
 }
 
-// Partículas aleatorias (estrellas, corazones, círculos)
 function createParticles(){
     const types = ["star","heart","circle"];
     const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
-    const heartColors = ["#FF0000", "#00FFFF"]; // Rojo y cian
+    const heartColors = ["#FF0000", "#00FFFF"];
 
     for(let i=0;i<10;i++){
         const p = document.createElement("div");
@@ -259,9 +271,19 @@ function createParticles(){
     }
 }
 
+function createGlows() {
+    for(let i=0;i<5;i++){
+        const glow = document.createElement("div");
+        glow.className = "lightGlow";
+        glow.style.left = `${Math.random()*100}%`;
+        glow.style.top = `${Math.random()*100}%`;
+        glow.style.width = `${50 + Math.random()*150}px`;
+        glow.style.height = glow.style.width;
+        body.appendChild(glow);
+        setTimeout(()=>glow.remove(), 2000);
+    }
+}
 </script>
 
 </body>
 </html>
-
-

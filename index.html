@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>TOP SECRET</title>
 <style>
-/* --- Básicos --- */
 body {
     font-family: Arial, sans-serif;
     background-color: #1a1a1a;
@@ -15,9 +14,19 @@ body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
+    transition: background-color 5s linear;
 }
 
-/* contenedor */
+#azulOverlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom, #021024 0%, rgba(0,0,0,0) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 5s linear;
+    z-index: 0;
+}
+
 .container {
     background-color: #2a2a2a;
     padding: 20px;
@@ -26,7 +35,7 @@ body {
     text-align: center;
     width: 350px;
     position: relative;
-    z-index: 20; /* arriba de efectos */
+    z-index: 5;
     box-shadow: 0 0 0px #d8c9a7;
     transition: box-shadow 5s ease;
 }
@@ -50,137 +59,107 @@ button {
     margin-bottom: 10px;
 }
 
+#mensaje, #zonaPersonal {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
 #gif {
     margin-top: 20px;
     display: none;
     width: 250px;
     border-radius: 10px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-#musicaArea {
-    display: none;
-    margin-top: 20px;
-}
-
+#musicaArea { display: none; margin-top: 20px; }
 audio { display: none; }
 
-/* --- Partículas (estrellas, corazones, círculos) --- */
+/* partículas */
 .particle {
     position: absolute;
     opacity: 0.9;
     pointer-events: none;
-    z-index: 5;
-    animation: float 5s linear forwards;
+    animation: float 5s linear infinite;
 }
 
 .star {
     width: 12px;
     height: 12px;
-    background: gold;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 
+                        79% 91%, 50% 70%, 21% 91%, 32% 57%, 
+                        2% 35%, 39% 35%);
 }
 
-.heartRed, .heartCyan {
-    width: 14px;
-    height: 14px;
-    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%);
+.heart {
+    width: 16px;
+    height: 16px;
+    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 
+                        2% 30%, 39% 0%, 50% 15%);
 }
-
-.heartRed { background: #ff3e3e; }    /* rojo intenso */
-.heartCyan { background: #00f7ff; }   /* azul cian */
 
 .circle {
     border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    background: cyan; /* se sobreescribe en JS */
 }
 
-/* movimiento partículas */
-@keyframes float {
-    0% { transform: translateY(0) scale(1); opacity: 0; }
-    10% { opacity: 1; }
-    100% { transform: translateY(-110vh) scale(1.3); opacity: 0; }
-}
-
-/* --- Rayos (triangulares o líneas largas) --- */
+/* luces giratorias */
 .lightRay {
     position: absolute;
-    width: 6px;
-    height: 260px;
+    width: 2px;
+    height: 120px;
     transform-origin: bottom center;
-    z-index: 3;
-    pointer-events: none;
-    opacity: 0.9;
-    animation: rayAnim 1.2s linear forwards;
-    border-radius: 3px;
+    opacity: 0.7;
+    animation: raySpin 1.5s linear forwards;
+    filter: blur(1px);
 }
 
-@keyframes rayAnim {
-    0% { transform: scaleY(0) translateY(0); opacity: 1; }
-    100% { transform: scaleY(1.6) translateY(-50vh); opacity: 0; }
+@keyframes raySpin {
+    0% { transform: rotate(var(--angle)) scaleY(0); opacity: 1; }
+    100% { transform: rotate(calc(var(--angle) + 360deg)) scaleY(3); opacity: 0; }
 }
 
-/* --- Destellos grandes difuminados --- */
-.lightGlow {
+/* destellos grandes */
+.flash {
     position: absolute;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    pointer-events: none;
-    z-index: 2;
-    opacity: 0.35;
-    filter: blur(30px);
-    animation: glowAnim 2s ease-out forwards;
-    mix-blend-mode: screen;
+    filter: blur(60px);
+    opacity: 0.6;
+    animation: flashFade 2s linear forwards;
 }
 
-@keyframes glowAnim {
-    0% { transform: scale(0.3); opacity: 0.25; }
-    50% { transform: scale(1); opacity: 0.45; }
-    100% { transform: scale(1.8); opacity: 0; }
+@keyframes flashFade {
+    0% { opacity: 0; transform: scale(0.3); }
+    50% { opacity: 0.7; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2); }
 }
 
-/* --- Overlay degradado azul marino (arriba->transparente abajo) --- */
-#navyGradient {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 8;
-    opacity: 0;
-    transition: opacity 5s linear;
-    background: linear-gradient(to bottom, rgba(0,26,51,1) 0%, rgba(0,26,51,0.0) 60%);
-}
-
-/* ajustar en móviles (opcional) */
-@media (max-width:480px){
-    .container { width: 92%; }
-    .lightRay { height: 200px; }
+/* animación partículas */
+@keyframes float {
+    0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
+
 <body>
+<div id="azulOverlay"></div>
 
-<!-- overlay de degradado azul marino -->
-<div id="navyGradient"></div>
-
-<div class="container" id="container">
+<div class="container">
     <h2>Ingrese la contraseña:</h2>
     <input type="password" id="password">
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, TE QUIERO ❤️
+        🎉 OLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA ❤️
     </p>
 
     <p id="mensaje"></p>
     <img id="gif">
 
     <div id="musicaArea">
-        <p>🎶 - PONLE MUSICA A MIKU - 🎵</p>
+        <p>🎶 - PONLE MUSICA A MIKU!!!1!1!! (yo) - 🎵</p>
         <button onclick="toggleMusica()" id="btnMusica">▶ Reproducir</button>
     </div>
 
@@ -188,220 +167,135 @@ audio { display: none; }
 </div>
 
 <script>
-/* --- Variables y elementos --- */
-const input = document.getElementById('password');
-const gif = document.getElementById('gif');
-const zonaPersonal = document.getElementById('zonaPersonal');
-const mensaje = document.getElementById('mensaje');
-const musicaArea = document.getElementById('musicaArea');
-const btnMusica = document.getElementById('btnMusica');
-const musica = document.getElementById('musica');
-const container = document.getElementById('container');
-const navy = document.getElementById('navyGradient');
-let partyStarted = false;
-let raysInterval, particlesInterval, glowsInterval;
+const coloresCirculos = ["lime","deepskyblue","darkgreen","blue",
+                        "purple","violet","yellow","orange",
+                        "gold","magenta","white","cyan","red"];
 
-/* --- Colores disponibles (incluyen rojo y azul cian) --- */
-const circleColors = [
-    "#ff3e3e", /* rojo */
-    "#00f7ff", /* azul cian */
-    "#00ff00", /* verde lima */
-    "#66ccff", /* azul cielo */
-    "#006400", /* verde oscuro */
-    "#0000ff", /* azul normal */
-    "#800080", /* purpura */
-    "#8A2BE2", /* violeta */
-    "#FFFF00", /* amarillo */
-    "#FFA500", /* naranja */
-    "#FFD580", /* naranja clarito */
-    "#E6E6FA", /* purpura clarito */
-    "#FFFFFF"  /* blanco */
-];
+const coloresLuces = [...coloresCirculos]; 
 
-function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+const coloresCorazones = {
+    rojo: "red",
+    cian: "cyan"
+};
 
-/* --- Contraseña / UI --- */
-input.addEventListener('keydown', e => { if(e.key === 'Enter') verificarContraseña(); });
+const input = document.getElementById("password");
+const musica = document.getElementById("musica");
+const botonMusica = document.getElementById("btnMusica");
+const container = document.querySelector(".container");
+const body = document.body;
+const overlay = document.getElementById("azulOverlay");
+
+input.addEventListener("keydown", e => { if(e.key==="Enter") verificarContraseña() });
 
 function verificarContraseña(){
     const claveCorrecta = "UNA TORTUGA Y UN ALACRAN NECESITABAN CU LIA R ENTONCES LE DICE A LA TORTUGA: CUM EN TU CA RA ELLA LE RESPONDE: SI. POR FAVOR EL ALACRAN SUBIO SOBRE S U PICO. ELLA LE PREGUNTA: POR QUE LO HICISTE?. EL LE RESPONDIO: PORQUE S I E QU I S D E.";
-    if(input.value === claveCorrecta){
-        mensaje.textContent = "✅ ¡Contraseña correcta! 🥭";
-        zonaPersonal.style.display = 'block';
-        gif.style.display = 'block';
-        gif.src = "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif";
-        input.disabled = true;
-        musicaArea.style.display = 'block';
-    } else {
-        mensaje.textContent = "❌ Contraseña incorrecta ❌";
+
+    const ok = input.value === claveCorrecta;
+
+    document.getElementById("mensaje").textContent =
+        ok ? "✅ ¡Contraseña correcta! 🥭" : "❌ Contraseña incorrecta ❌";
+
+    document.getElementById("zonaPersonal").style.display = ok ? "block" : "none";
+
+    const gif = document.getElementById("gif");
+    gif.style.display = "block";
+    gif.src = ok
+        ? "https://media1.tenor.com/m/n8m1oRmPHlsAAAAC/hatsune-miku-miku.gif"
+        : "https://media1.tenor.com/m/Ct2Vc5XjweoAAAAd/hatsune-miku-vocaloid.gif";
+
+    if (!ok) {
+        musica.pause();
+        musica.currentTime = 0;
+        document.getElementById("musicaArea").style.display = "none";
+        botonMusica.textContent = "▶ Reproducir";
+        return;
     }
+
+    input.disabled = true;
+    document.getElementById("musicaArea").style.display = "block";
 }
 
-/* --- Botón reproducir: enciende música y comienza efecto gradual (5s) --- */
 function toggleMusica(){
     if(musica.paused){
         musica.play();
-        btnMusica.textContent = '⏸ Pausar';
-        if(!partyStarted) startGradualEffects();
+        botonMusica.textContent = "⏸ Pausar";
+        startEffects();
     } else {
         musica.pause();
-        btnMusica.textContent = '▶ Reproducir';
+        botonMusica.textContent = "▶ Reproducir";
     }
 }
 
-/* --- Efecto gradual: 5 segundos (misma velocidad para todo) --- */
-function startGradualEffects(){
-    partyStarted = true;
-    const steps = 50;            // 50 pasos -> 5s con 100ms
-    let step = 0;
-    // Valores iniciales / objetivos
-    const initialBg = {r:26, g:26, b:26}; // rgb(26,26,26) = #1a1a1a
-    const targetBg = {r:16, g:16, b:16};  // un poco más oscuro
-    const overlayMaxOpacity = 0.85;       // máximo para el gradiente navy
-    // animar en interval
-    const interval = setInterval(() => {
+function startEffects(){
+    let step = 0, total = 50;
+    let fade = setInterval(() =>{
         step++;
-        const p = step / steps; // 0..1
-        // fondo interpolado
-        const r = Math.round(initialBg.r + (targetBg.r - initialBg.r)*p);
-        const g = Math.round(initialBg.g + (targetBg.g - initialBg.g)*p);
-        const b = Math.round(initialBg.b + (targetBg.b - initialBg.b)*p);
-        document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
-        // overlay azul marino (navy) aparece a la misma velocidad
-        navy.style.opacity = (overlayMaxOpacity * p).toString();
-        // neon border crece suavemente
-        const neonStrength = Math.round(15 * p);
-        container.style.boxShadow = `0 0 ${neonStrength}px #d8c9a7, 0 0 ${neonStrength*1.6}px #d8c9a7 inset`;
-        if(step >= steps){
-            clearInterval(interval);
-            // una vez terminado, inicia la fiesta repetitiva
-            startPartyLoops();
-            // también genera una tanda inicial sincronizada (luces+destellos)
-            createRaysAndGlows();
-            createParticlesBurst();
+        let p = step/total;
+        container.style.boxShadow = `0 0 ${p*25}px #d8c9a7,0 0 ${p*40}px #d8c9a7 inset`;
+        body.style.backgroundColor = `rgb(${26-p*10},${26-p*10},${26-p*10})`;
+        overlay.style.opacity = p;
+        if(step>=total){
+            clearInterval(fade);
+            party();
         }
-    }, 100);
+    },100);
 }
 
-/* --- Inicia bucles que generan efectos cada X ms --- */
-function startPartyLoops(){
-    // rayos + glows sincronizados cada 2000ms
-    raysInterval = setInterval(createRaysAndGlows, 2000);
-    // partículas frecuentes
-    particlesInterval = setInterval(createParticlesBurst, 900);
-    // nota: los destellos grandes están dentro createRaysAndGlows para sync
+function party(){
+    setInterval(createRays, 800);
+    setInterval(createParticles, 600);
+    setInterval(createFlashes, 1500);
 }
 
-/* --- Crear rayos (desde bordes) + destellos grandes al mismo tiempo --- */
-function createRaysAndGlows(){
-    // rayos desde bordes: grandes, triangulares/lineales que van al centro
-    const edgeCount = 12;
-    for(let i=0;i<edgeCount;i++){
-        const color = rand(circleColors);
-        const ray = document.createElement('div');
-        ray.className = 'lightRay';
-        ray.style.background = color;
-        // escoger borde: 0=top,1=bottom,2=left,3=right
-        const edge = Math.floor(Math.random()*4);
-        let x, y, angle, scaleY;
-        if(edge === 0){ // top -> apuntan hacia abajo (centro)
-            x = Math.random()*window.innerWidth;
-            y = -40;
-            angle = (180 + (Math.random()*40-20)); // hacia abajo
-        } else if(edge === 1){ // bottom
-            x = Math.random()*window.innerWidth;
-            y = window.innerHeight + 40;
-            angle = (0 + (Math.random()*40-20)); // hacia up (rotate 0)
-        } else if(edge === 2){ // left
-            x = -40;
-            y = Math.random()*window.innerHeight;
-            angle = (90 + (Math.random()*40-20));
-        } else { // right
-            x = window.innerWidth + 40;
-            y = Math.random()*window.innerHeight;
-            angle = (270 + (Math.random()*40-20));
-        }
-        ray.style.left = `${x}px`;
-        ray.style.top = `${y}px`;
-        ray.style.transform = `rotate(${angle}deg)`;
-        document.body.appendChild(ray);
-        // remover luego de animación
-        setTimeout(()=> ray.remove(), 1400);
-    }
-
-    // destellos grandes (glows) sincronizados con los rayos
-    const glowCount = 8;
-    for(let j=0;j<glowCount;j++){
-        const g = document.createElement('div');
-        g.className = 'lightGlow';
-        const color = rand(circleColors);
-        g.style.background = `radial-gradient(circle, ${color} 0%, rgba(0,0,0,0) 70%)`;
-        g.style.width = `${80 + Math.random()*240}px`;
-        g.style.height = g.style.width;
-        g.style.left = `${Math.random()*100}%`;
-        g.style.top = `${Math.random()*100}%`;
-        document.body.appendChild(g);
-        setTimeout(()=> g.remove(), 2000);
+function createRays(){
+    for(let i=0; i<12; i++){
+        const ray = document.createElement("div");
+        ray.className = "lightRay";
+        ray.style.left = `${Math.random()*100}%`;
+        ray.style.top = `${Math.random()*100}%`;
+        ray.style.setProperty("--angle", `${Math.random()*360}deg`);
+        ray.style.background = coloresLuces[Math.floor(Math.random()*coloresLuces.length)];
+        body.appendChild(ray);
+        setTimeout(()=>ray.remove(),1500);
     }
 }
 
-/* --- Partículas: burst (incluye duplicado de circulares y corazones rojos/cian) --- */
-function createParticlesBurst(){
-    const types = ['star','heart','circle'];
-    const circleColorsLocal = circleColors.slice(); // copia
-    // crear mayor número para sensación intensa
+function createParticles(){
     for(let i=0;i<20;i++){
-        const type = types[Math.floor(Math.random()*types.length)];
-        if(type === 'star'){
-            const s = document.createElement('div');
-            s.className = 'particle star';
-            s.style.left = `${Math.random()*100}vw`;
-            s.style.top = `${Math.random()*100}vh`;
-            s.style.setProperty('animation-duration', `${4+Math.random()*3}s`);
-            document.body.appendChild(s);
-            setTimeout(()=> s.remove(), 5000);
-        } else if(type === 'heart'){
-            const h = document.createElement('div');
-            // aleatorio rojo o cian
-            h.className = 'particle ' + (Math.random()<0.5 ? 'heartRed' : 'heartCyan');
-            h.style.left = `${Math.random()*100}vw`;
-            h.style.top = `${Math.random()*100}vh`;
-            h.style.setProperty('animation-duration', `${5+Math.random()*4}s`);
-            document.body.appendChild(h);
-            setTimeout(()=> h.remove(), 6000);
-        } else { // circle
-            // primer círculo
-            const c = document.createElement('div');
-            c.className = 'particle circle';
-            c.style.left = `${Math.random()*100}vw`;
-            c.style.top = `${Math.random()*100}vh`;
-            c.style.width = `${6+Math.random()*20}px`;
-            c.style.height = c.style.width;
-            c.style.background = rand(circleColorsLocal);
-            c.style.setProperty('animation-duration', `${4+Math.random()*4}s`);
-            document.body.appendChild(c);
-            // duplicado (segundo círculo)
-            const c2 = c.cloneNode(true);
-            c2.style.left = `${Math.random()*100}vw`;
-            c2.style.top = `${Math.random()*100}vh`;
-            document.body.appendChild(c2);
-            setTimeout(()=> c.remove(), 5000);
-            setTimeout(()=> c2.remove(), 5000);
+        const type = ["star","circle","heart"][Math.floor(Math.random()*3)];
+        const p = document.createElement("div");
+        p.className = "particle "+type;
+        p.style.left = `${Math.random()*100}%`;
+        p.style.top = `${Math.random()*100}%`;
+
+        if(type==="circle"){
+            let color = coloresCirculos[Math.floor(Math.random()*coloresCirculos.length)];
+            p.style.background = color;
+            p.style.width = p.style.height = `${5+Math.random()*15}px`;
         }
+        if(type==="heart"){
+            p.style.background = Math.random()>0.5 ? coloresCorazones.rojo : coloresCorazones.cian;
+        }
+        if(type==="star"){
+            p.style.background = "gold";
+        }
+
+        body.appendChild(p);
+        setTimeout(()=>p.remove(),5000);
     }
 }
 
-/* --- Cleanup / detener (opcional, no usado ahora) --- */
-function stopParty(){
-    clearInterval(raysInterval);
-    clearInterval(particlesInterval);
-    clearInterval(glowsInterval);
-    partyStarted = false;
-    navy.style.opacity = 0;
-    container.style.boxShadow = '0 0 0px #d8c9a7';
+function createFlashes(){
+    for(let i=0;i<3;i++){
+        const f = document.createElement("div");
+        f.className = "flash";
+        f.style.left = `${Math.random()*100}%`;
+        f.style.top = `${Math.random()*100}%`;
+        f.style.background = coloresCirculos[Math.floor(Math.random()*coloresCirculos.length)];
+        body.appendChild(f);
+        setTimeout(()=>f.remove(),2000);
+    }
 }
-
-/* --- listo --- */
 </script>
 
 </body>

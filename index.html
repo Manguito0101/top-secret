@@ -88,10 +88,27 @@ audio {
 .heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); }
 .circle { border-radius: 50%; }
 
+/* Movimiento de derecha a izquierda con desvíos aleatorios */
 @keyframes float {
-    0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translate(0, -200px) rotate(360deg); opacity: 0; }
+    0% {
+        transform: translate(100vw, 0px) rotate(0deg);
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
+    60% {
+        transform: translate(50vw, -50px) rotate(180deg);
+    }
+    80% {
+        transform: translate(20vw, 40px) rotate(270deg);
+    }
+    100% {
+        transform: translate(-20vw, -30px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
 }
 
 /* Luz hacia adentro */
@@ -278,7 +295,7 @@ function createParticles(){
         const p = document.createElement("div");
         const type = types[Math.floor(Math.random()*types.length)];
         p.className = "particle "+type;
-        p.style.left = `${Math.random()*100}%`;
+        p.style.left = `105%`;
         p.style.top = `${Math.random()*100}%`;
         p.style.width = `${5+Math.random()*15}px`;
         p.style.height = p.style.width;
@@ -325,6 +342,7 @@ function createGlows() {
 
 </body>
 </html>
+
 
 
 

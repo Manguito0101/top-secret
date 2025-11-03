@@ -84,9 +84,17 @@ audio {
     animation: float 5s linear infinite;
 }
 
-.star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background: gold; }
-.heart { clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); background: pink; }
-.circle { background: cyan; }
+.star { 
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); 
+    background: gold; 
+}
+.heart { 
+    clip-path: polygon(50% 15%, 61% 0%, 98% 30%, 50% 90%, 2% 30%, 39% 0%, 50% 15%); 
+    background: #ff0000; /* Rojo intenso */ 
+}
+.circle { 
+    background: green; /* este color será reemplazado dinámicamente */ 
+}
 
 @keyframes float {
     0% { transform: translate(0,0) rotate(0deg); opacity: 0; }
@@ -120,7 +128,7 @@ audio {
     <button onclick="verificarContraseña()">Aceptar</button>
 
     <p id="zonaPersonal" style="display:none;">
-        🎉 HOLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
+        🎉 OLA ASJKDJKASSAJ FELIZ CUMPLEAÑOS GREGORI PASATELA MUY BONITO HOY Y TODOS LOS DIAS DE TU VIDA, ME COSTÓ UN HUEVO HACER ESTO XDXDXD ESPERO QUE TE HAYA HECHO REIR, Te kiero mucho gracias por estar en mi vida ❤️
     </p>
 
     <p id="mensaje"></p>
@@ -221,6 +229,7 @@ function createRays(){
 // Partículas aleatorias (estrellas, corazones, círculos)
 function createParticles(){
     const types = ["star","heart","circle"];
+    const circleColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FFFFFF"];
     for(let i=0;i<10;i++){
         const p = document.createElement("div");
         const type = types[Math.floor(Math.random()*types.length)];
@@ -230,6 +239,9 @@ function createParticles(){
         p.style.width = `${5+Math.random()*15}px`;
         p.style.height = p.style.width;
         p.style.opacity = Math.random();
+        if(type==="circle"){
+            p.style.background = circleColors[Math.floor(Math.random()*circleColors.length)];
+        }
         body.appendChild(p);
         setTimeout(()=>p.remove(),5000);
     }
@@ -238,4 +250,3 @@ function createParticles(){
 
 </body>
 </html>
-

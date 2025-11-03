@@ -219,7 +219,12 @@ function toggleMusica(){
     if(musica.paused){
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
-        startEffects();
+
+        // ⏱️ Esperar 5 segundos antes de activar efectos
+        setTimeout(() => {
+            startEffects();
+        }, 5000);
+
     } else {
         musica.pause();
         botonMusica.textContent = "▶ Reproducir";
@@ -228,18 +233,27 @@ function toggleMusica(){
 
 function startEffects(){
     let step = 0, total = 50;
+
     let fade = setInterval(() =>{
         step++;
         let p = step/total;
+
+        // Efecto de luz en el marco
         container.style.boxShadow = `0 0 ${p*25}px #d8c9a7,0 0 ${p*40}px #d8c9a7 inset`;
+
+        // Oscurecer el fondo gradualmente
         body.style.backgroundColor = `rgb(${26-p*10},${26-p*10},${26-p*10})`;
+
+        // Degradado azul marino aparece al mismo tiempo
         overlay.style.opacity = p;
+
         if(step>=total){
             clearInterval(fade);
-            party();
+            party(); // Aquí inicia la fiesta
         }
     },100);
 }
+
 
 function party(){
     setInterval(()=>{
@@ -279,4 +293,5 @@ function createFlashes(){
 
 </body>
 </html>
+
 

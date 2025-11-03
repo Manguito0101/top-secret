@@ -232,16 +232,24 @@ setInterval(createParticles, 1000);
 
 }
 
-function createRays(){
-    for(let i=0;i<15;i++){
+function createRays() {
+    const rayColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
+
+    for(let i = 0; i < 15; i++){
         const ray = document.createElement("div");
         ray.className = "lightRay";
-        let angle = Math.random()*360;
-        ray.style.setProperty("--angle", angle+"deg");
-        ray.style.left = `${Math.random()*100}%`;
-        ray.style.top = `${Math.random()*100}%`;
+
+        let angle = Math.random() * 360;
+        ray.style.setProperty("--angle", angle + "deg");
+
+        ray.style.left = `${Math.random() * 100}%`;
+        ray.style.top = `${Math.random() * 100}%`;
+
+        // 📌 Color aleatorio
+        ray.style.background = rayColors[Math.floor(Math.random() * rayColors.length)];
+
         body.appendChild(ray);
-        setTimeout(()=>ray.remove(),1500);
+        setTimeout(() => ray.remove(), 1500);
     }
 }
 
@@ -278,18 +286,27 @@ function createParticles(){
 }
 
 function createGlows() {
-    for(let i=0;i<5;i++){
+    const glowColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
+
+    for(let i=0; i<5; i++){
         const glow = document.createElement("div");
         glow.className = "lightGlow";
         glow.style.left = `${Math.random()*100}%`;
         glow.style.top = `${Math.random()*100}%`;
+
         glow.style.width = `${50 + Math.random()*150}px`;
         glow.style.height = glow.style.width;
+
+        // 📌 Color aleatorio aplicado al gradiente
+        const color = glowColors[Math.floor(Math.random() * glowColors.length)];
+        glow.style.background = `radial-gradient(circle, ${color}80 0%, rgba(255,255,255,0) 70%)`;
+
         body.appendChild(glow);
-        setTimeout(()=>glow.remove(), 2000);
+        setTimeout(() => glow.remove(), 2000);
     }
 }
 </script>
 
 </body>
 </html>
+

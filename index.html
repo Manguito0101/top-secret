@@ -4,73 +4,92 @@
 <meta charset="UTF-8">
 <title>TOP SECRET</title>
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #1a1a1a;
-        color: #f5f5dc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        overflow: hidden;
-    }
-    .container {
-        background-color: #2a2a2a;
-        padding: 20px;
-        border-radius: 10px;
-        border: 3px solid #d8c9a7;
-        text-align: center;
-        width: 350px;
-        position: relative;
-        z-index: 2;
-        /* Neón animado */
-        box-shadow: 0 0 15px #d8c9a7, 0 0 30px #d8c9a7 inset;
-        animation: neon 4s linear infinite;
-    }
-    @keyframes neon {
-        0% { box-shadow: 0 0 15px #d8c9a7, 0 0 30px #d8c9a7 inset; }
-        25% { box-shadow: 0 0 25px #d8c9a7, 0 0 40px #d8c9a7 inset; }
-        50% { box-shadow: 0 0 15px #d8c9a7, 0 0 30px #d8c9a7 inset; }
-        75% { box-shadow: 0 0 25px #d8c9a7, 0 0 40px #d8c9a7 inset; }
-        100% { box-shadow: 0 0 15px #d8c9a7, 0 0 30px #d8c9a7 inset; }
-    }
-    input {
-        padding: 10px;
-        margin: 10px 0;
-        width: 90%;
-        border: 2px solid #d8c9a7;
-        border-radius: 5px;
-        background-color: #1a1a1a;
-        color: #fff;
-    }
-    button {
-        padding: 10px 20px;
-        background-color: #d8c9a7;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 10px;
-    }
-    #mensaje, #zonaPersonal {
-        margin-top: 15px;
-        font-size: 18px;
-    }
-    #gif {
-        margin-top: 20px;
-        display: none;
-        width: 250px;
-        border-radius: 10px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    #musicaArea {
-        display: none;
-        margin-top: 20px;
-    }
-    audio {
-        display: none;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #f5f5dc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    transition: background-color 5s linear;
+}
+
+.container {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    border: 3px solid #d8c9a7;
+    text-align: center;
+    width: 350px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 0px #d8c9a7; /* inicio sin neon */
+    transition: box-shadow 5s ease;
+}
+
+input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 90%;
+    border: 2px solid #d8c9a7;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #d8c9a7;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#mensaje, #zonaPersonal {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+#gif {
+    margin-top: 20px;
+    display: none;
+    width: 250px;
+    border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#musicaArea {
+    display: none;
+    margin-top: 20px;
+}
+
+audio {
+    display: none;
+}
+
+/* Luces de fiesta */
+.light {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    width: 4px;
+    height: 200px;
+    background: rgba(255, 255, 200, 0.6);
+    transform-origin: bottom center;
+    opacity: 0;
+    animation: lightMove 2s linear infinite;
+}
+
+@keyframes lightMove {
+    0% { transform: rotate(0deg); opacity: 1; }
+    50% { transform: rotate(45deg); opacity: 0.5; }
+    100% { transform: rotate(-45deg); opacity: 0; }
+}
 </style>
 </head>
 <body>
@@ -103,11 +122,11 @@ const botonMusica = document.getElementById("btnMusica");
 const gif = document.getElementById("gif");
 const zonaPersonal = document.getElementById("zonaPersonal");
 const mensaje = document.getElementById("mensaje");
+const container = document.querySelector(".container");
+const body = document.body;
 
 input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        verificarContraseña();
-    }
+    if (event.key === "Enter") verificarContraseña();
 });
 
 function verificarContraseña() {
@@ -136,10 +155,40 @@ function toggleMusica() {
     if (musica.paused) {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
+
+        // Después de 5 segundos activamos neón y oscurecemos el fondo gradualmente
+        let duration = 5000;
+        container.style.transition = `box-shadow ${duration}ms ease`;
+        body.style.transition = `background-color ${duration}ms ease`;
+        setTimeout(() => {
+            container.style.boxShadow = "0 0 25px #d8c9a7, 0 0 40px #d8c9a7 inset";
+            body.style.backgroundColor = "#111111";
+
+            // Crear luces de fiesta
+            createLights();
+        }, duration);
+
     } else {
         musica.pause();
         botonMusica.textContent = "▶ Reproducir";
     }
+}
+
+function createLights(){
+    for(let i=0; i<10; i++){
+        const light = document.createElement("div");
+        light.className = "light";
+        light.style.left = `${Math.random()*100}%`;
+        light.style.animationDuration = `${1.5 + Math.random()*1}s`;
+        light.style.transform = `rotate(${Math.random()*90 - 45}deg)`;
+        body.appendChild(light);
+
+        // Remover después de un tiempo
+        setTimeout(()=> light.remove(), 3000 + Math.random()*2000);
+    }
+
+    // Generar más luces cada cierto tiempo
+    setInterval(()=>createLights(), 2500);
 }
 </script>
 

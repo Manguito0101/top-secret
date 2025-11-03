@@ -212,6 +212,8 @@ function toggleMusica() {
     if (musica.paused) {
         musica.play();
         botonMusica.textContent = "⏸ Pausar";
+        createParticles(); // arranca partículas inmediatamente
+
 
         // Gradual neon + fondo + degradado azul marino
 let step = 0;
@@ -261,7 +263,7 @@ setInterval(() => {
 
 // partículas por separado como antes
 createParticles();
-setInterval(createParticles, 1000);
+setInterval(createParticles, 350);
 
 }
 
@@ -302,12 +304,16 @@ function createParticles(){
         p.style.height = p.style.width;
         p.style.opacity = Math.random();
 
+        // ✅ Animación más rápida y fluida
+        p.style.animation = `float ${1.5 + Math.random()*2}s linear infinite`;
+
         if(type==="circle"){
             p.style.background = circleColors[Math.floor(Math.random()*circleColors.length)];
             // Duplicar círculos
             const p2 = p.cloneNode();
             p2.style.left = `${Math.random()*100}%`;
             p2.style.top = `${Math.random()*100}%`;
+            p2.style.animation = `float ${1.5 + Math.random()*2}s linear infinite`; // ✅ también animación
             body.appendChild(p2);
             setTimeout(()=>p2.remove(),5000);
         } else if(type==="heart"){
@@ -318,6 +324,7 @@ function createParticles(){
         setTimeout(()=>p.remove(),5000);
     }
 }
+
 
 function createGlows() {
     const glowColors = ["#00FF00","#00CCFF","#006400","#0000FF","#800080","#8A2BE2","#FFFF00","#FFA500","#FFD580","#E6E6FA","#FF0000"];
@@ -343,6 +350,7 @@ function createGlows() {
 
 </body>
 </html>
+
 
 
 
